@@ -25,6 +25,12 @@ export class Category {
         return category.PairOfWords.length;
     }
 
+  
+    getDateAsString() : string {
+        const today = new Date();
+        return today.toLocaleDateString();
+      }
+
 
 }
 

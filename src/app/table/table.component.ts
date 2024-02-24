@@ -21,16 +21,24 @@ import { DeleteCategoryDialogComponent } from '../delete-category-dialog/delete-
   styleUrl: './table.component.css'
 })
 export class TableComponent implements OnInit {
+  getDateAsString() : string {
+    const today = new Date();
+    return today.toLocaleDateString();
+  }
+  public NumOfWords ( category : Category): number {
+    return category.PairOfWords.length;
+}
+
   constructor(private categoryService : CategoryService, private dialogService : MatDialog){}
   ngOnInit(): void {
     this.allCategories = this.categoryService.list();
   }
 
   allCategories : Category[]=[];
-  displayedColumns = [''] // אחרי ה html
+  displayedColumns = ['fullCate','numofwords','lastedit','actions'] // אחרי ה html
 
   deleteCategory(id:number, fullCate : string){
-    const dialogRef = this.dialogService.open(DeleteCategoryDialogComponent,{data : fullCate,}) // חייב לייצר DeleteCategoryDialog comp
+    const dialogRef = this.dialogService.open(DeleteCategoryDialogComponent,{data : fullCate,}) 
  
     dialogRef.afterClosed().subscribe(deletionResult =>{
       if(deletionResult){
