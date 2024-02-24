@@ -1,0 +1,24 @@
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(233, 18, 90);
+    padding: 20px 0;
+    box-sizing: border-box;
+    height: 30px;
+  }
+
+
+
+
+ .title {
+    color:white;
+    font-weight:normal;
+    }
+
+    .help-icon{
+        color: white;
+    }

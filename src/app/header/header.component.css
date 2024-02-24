@@ -1,0 +1,30 @@
+
+.header {
+    width: 100%;
+    top:0%;
+    background-color: rgb(233, 18, 90);
+    justify-content: space-between;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 20px,40px;
+  }
+  .title {
+    font-size: 35px;
+    font-weight: bold;
+    color: white;
+}
+
+.menu-icon,
+.person-icon {
+    color: white;
+}
+.title-button{
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+.title-button:hover {
+  background-color:rgb(238, 97, 149);
+  cursor: pointer;
+}

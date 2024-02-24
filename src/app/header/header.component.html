@@ -1,1 +1,22 @@
-<p>header works!</p>
+<div>
+    <mat-toolbar class="header">
+        <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-icon">
+        <mat-icon>menu</mat-icon>
+      </button>
+    
+      <mat-menu #menu="matMenu">
+        <button  routerLink ="" mat-menu-item >Admin Mode</button>
+        <button routerLink ="" mat-menu-item  >Game Mode</button>
+    </mat-menu>
+     
+      <button class ="title-button"> <span class="title-button">LITTLE LINGUIST</span></button>
+     
+     
+      <button  mat-icon-button class="person-icon" >
+        <mat-icon>account_circle</mat-icon>
+      </button>
+
+     
+
+    </mat-toolbar>
+</div>
