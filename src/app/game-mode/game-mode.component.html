@@ -1,0 +1,10 @@
+<div class="category-container">
+    <h1 class="title-choose">Choose a Category</h1>
+    <div class="category-squares">
+      <div *ngFor="let category of categories">
+        <a [routerLink]="['/Game', category.id]">
+          <p class="category-name">{{ category.cateName }}</p>
+        </a>
+      </div>
+    </div>
+  </div>

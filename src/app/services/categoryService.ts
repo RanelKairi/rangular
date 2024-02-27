@@ -43,17 +43,22 @@ export class CategoryService{
         return Array.from(this.getCategories().values());
     }
 
-    get(id : number) : Category | undefined {
-        return this.getCategories().get(id);
+    get(id : number) : Category {
+        let categoriesData = this.getCategories();
+        if(!categoriesData.has(id)){
+        throw new Error("fail"+id)
+    
+        }
+        return categoriesData.get(id)!;
     }
 
     add(newCategoryData:Category) {
         let nextId = this.getNextID();
             newCategoryData.id = nextId
 
-        let categoryData = this.getCategories()
-            categoryData.set(nextId, newCategoryData);
-            this.setCategories(categoryData);
+        let categoriesData = this.getCategories()
+            categoriesData.set(nextId, newCategoryData);
+            this.setCategories(categoriesData);
 
             this.setNextId(++nextId)
 
@@ -61,6 +66,7 @@ export class CategoryService{
 
     update(existingCategory : Category) : void {
         let categoryData = this.getCategories()
+        console.log("hhh",)
 // לבדוק
          if(categoryData.has(existingCategory.id)){
             categoryData.set(existingCategory.id,existingCategory);
@@ -69,10 +75,10 @@ export class CategoryService{
          }
 
     delete(existingCategoryId : number) : void {
-        let categoryData = this.getCategories();
+        let categoriesData = this.getCategories();
 // להוסיף אולי IF
-        categoryData.delete(existingCategoryId);
-        this.setCategories(categoryData)
+        categoriesData.delete(existingCategoryId);
+        this.setCategories(categoriesData)
     }
 
 

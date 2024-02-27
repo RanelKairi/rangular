@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormsModule, NgModelGroup } from '@angular/forms';
+import { AbstractControl, FormsModule, NgForm, NgModelGroup, ValidationErrors, Validator, ValidatorFn } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -26,9 +26,12 @@ import { TranslatedWord } from '../shared/Data/TranslatedWord';
   templateUrl: './category-form.component.html',
   styleUrl: './category-form.component.css'
 })
-export class CategoryFormComponent implements OnInit { 
+export class CategoryFormComponent implements OnInit, Validator { 
+  
   currentCategory: Category = new Category(0,"",Language.English,Language.Hebrew,[]);
-  @ViewChild('wordGroup') wordGroup? : NgModelGroup;
+
+
+  @ViewChild('wordGroup') PairOfWordsGroup? : NgModelGroup;
   hebrewLettersPattern = '^[א-ת\s]+$';
   englishLettersPattern = '^[A-Za-z\s]+$';
 
@@ -37,11 +40,47 @@ export class CategoryFormComponent implements OnInit {
   @Input()
   id? : string;
 
-  constructor(private categoryService: CategoryService, private router: Router) {}
+  constructor(private categoryService: CategoryService, private router: Router) { 
 
-  ngOnInit(): void {
-    console.log("provided Id:", this.id)
-    if (this.id) {
+  }
+
+
+      validate(control: AbstractControl): ValidationErrors | null {
+        throw new Error('Method not implemented.');
+    }
+  
+
+      validateWords(form: NgForm) {
+        const wordsArray = this.currentCategory.PairOfWords;
+          if (!wordsArray || wordsArray.length === 0) 
+            { this.PairOfWordsGroup?.control.setErrors({ 'noWords': true });
+          } else { 
+              this.PairOfWordsGroup?.control.setErrors(null);
+            }
+      }
+
+       atLeastOnePair(): ValidatorFn {
+          return (control: AbstractControl): ValidationErrors | null => {
+              const wordsArray = control.get('PairOfWordsGroup')?.value;
+  
+          if (!wordsArray || wordsArray.length === 0) {
+              return { 'noWords': true };
+          }
+  
+          for (const word of wordsArray) {
+            if (word.originWord && word.targetWord) {
+              return null; 
+              }
+          } 
+  
+      return { 'noWords': true }; 
+    };
+  }
+
+
+ ngOnInit(): void {
+    console.log("provided Id:", this.id,"")
+      if (this.id) {
       let categoryFromService = this.categoryService.get(parseInt(this.id));
       console.log('Category loaded:', this.currentCategory);
 
@@ -52,6 +91,8 @@ export class CategoryFormComponent implements OnInit {
     }
   }
 
+
+
   onSubmitRegistration() {
     console.log("Form submitted!");
     if (this.id) {
@@ -59,7 +100,8 @@ export class CategoryFormComponent implements OnInit {
     } else {
       this.categoryService.add(this.currentCategory)
     }
-    console.log(this.currentCategory)
+    console.log("current category",this.currentCategory)
+    console.log("cateName:",this.currentCategory.cateName)
     this.router.navigate(['']);
   }
 
@@ -69,7 +111,7 @@ export class CategoryFormComponent implements OnInit {
 
   removePairOfWords(index : number) {
     this.currentCategory.PairOfWords.splice(index, 1);
-    this.wordGroup?.control.markAsDirty();
+    this.PairOfWordsGroup?.control.markAsDirty();
   }
  } 
 

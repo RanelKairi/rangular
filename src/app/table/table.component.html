@@ -11,15 +11,25 @@
 
     <ng-container matColumnDef="lastedit">
         <th mat-header-cell *matHeaderCellDef>last edit</th>
-        <td mat-cell *matCellDef="let category">{{category.id}}</td>
+        <td mat-cell *matCellDef="let category">{{getDateAsString(category)}}</td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>actions</th>
         <td mat-cell *matCellDef="let category">
-            <button mat-icon-button [routerLink]="['editcategory/:id']">
+            <button mat-icon-button [routerLink]="['/editcategory', category.id]">
                 <mat-icon>edit</mat-icon>
             </button>
+            
+            <button mat-icon-button (click)="deleteCategory(category.id, category.fullCate())">
+                <mat-icon>delete</mat-icon>
+              </button>
+
+              <button mat-icon-button (click)="showlog()">
+                <mat-icon>manu</mat-icon>
+              </button>
+            
+
             </td>
     </ng-container>
 

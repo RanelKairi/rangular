@@ -21,21 +21,47 @@ import { DeleteCategoryDialogComponent } from '../delete-category-dialog/delete-
   styleUrl: './table.component.css'
 })
 export class TableComponent implements OnInit {
-  getDateAsString() : string {
-    const today = new Date();
-    return today.toLocaleDateString();
+  allCategories : Category[]=[];
+  displayedColumns = ['fullCate','numofwords','lastedit','actions'] // אחרי ה html
+  dataSource = new MatTableDataSource<Category>(this.allCategories);
+  sortedData: Category[] = [];
+  sort!: MatSort | null;
+
+  
+
+  getDateAsString(category: Category) : Date {
+    return category.lastUpdateDate;
   }
+
+  showlog() : void {
+    console.log("allCategories",this.allCategories,JSON.stringify(this.allCategories))
+    let pik = JSON.stringify(this.allCategories)
+    let pik2 = JSON.stringify(Array.from(this.allCategories.values()))
+    console.log("hereispik",pik,"here is pik 2",pik2)
+   // let piki = localStorage.getItem()
+      
+  }
+
   public NumOfWords ( category : Category): number {
     return category.PairOfWords.length;
 }
 
-  constructor(private categoryService : CategoryService, private dialogService : MatDialog){}
+  constructor(private categoryService : CategoryService, private dialogService : MatDialog){
+    this.sortedData = this.allCategories.slice();
+
+  }
+  
+  
   ngOnInit(): void {
     this.allCategories = this.categoryService.list();
+    this.dataSource = new MatTableDataSource<Category>(this.allCategories);
+    this.dataSource.sort = this.sort;
+    console.log("allCategories",this.allCategories,"this.dataSource")
+    
+    
+    
   }
 
-  allCategories : Category[]=[];
-  displayedColumns = ['fullCate','numofwords','lastedit','actions'] // אחרי ה html
 
   deleteCategory(id:number, fullCate : string){
     const dialogRef = this.dialogService.open(DeleteCategoryDialogComponent,{data : fullCate,}) 
@@ -44,6 +70,7 @@ export class TableComponent implements OnInit {
       if(deletionResult){
         this.categoryService.delete(id);
         this.allCategories = this.categoryService.list();
+        console.log('all Categories',this.allCategories)
       }
     })
  
